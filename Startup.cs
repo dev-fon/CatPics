@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using CatPics.Data;
+using Newtonsoft.Json.Serialization;
 
 namespace CatPics
 {
@@ -27,7 +23,13 @@ namespace CatPics
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<AnimalService>();
+
+            // This allows us to create models with uppercased properties. MVC will automatically fix the casing in 
+            // incoming and outgoing requests
+            services.AddMvc().AddNewtonsoftJson(options =>
+                        options.SerializerSettings.ContractResolver =
+                            new CamelCasePropertyNamesContractResolver());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

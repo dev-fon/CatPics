@@ -1,5 +1,27 @@
 ﻿@page "/"
+@using CatPics.Data
+@inject AnimalService AnimalService
 
-<h1>Hello, world!</h1>
+  <h1>Cats pulled from <a href="thecatapi.com">the Cat API</a></h1>
 
-Welcome to your new app.
+@if (animals == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var animal in animals)
+    {
+        <img src="@animal.Url" height="400">
+    }
+}
+
+@code {
+
+    Animal[] animals;
+
+    protected override async Task OnInitAsync()
+    {
+        animals = await AnimalService.GetAnimals();
+    }
+}
